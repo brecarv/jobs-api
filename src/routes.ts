@@ -20,5 +20,9 @@ router.put("/companies/:id", companiesController.update);
 router.delete("/companies/:id", companiesController.delete);
 
 router.get("/jobs", jobsController.index);
+router.get("/jobs/:id", jobsController.show);
+router.post("/jobs/", jobsController.save);
+router.put("/jobs/:id", jobsController.update);
+router.delete("/jobs/:id", jobsController.delete);
 
 export { router };

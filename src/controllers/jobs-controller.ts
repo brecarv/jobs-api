@@ -12,4 +12,73 @@ export const jobsController = {
       }
     }
   },
+
+  save: async (req: Request, res: Response) => {
+    const { title, description, limitDate, companyId } = req.body;
+
+    try {
+      const job = await Job.create({
+        title,
+        description,
+        limitDate,
+        companyId,
+      });
+      return res.status(201).json(job);
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).json({ message: err.message });
+      }
+    }
+  },
+
+  show: async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+      const job = await Job.findByPk(id, { include: "company" });
+      return res.json(job);
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).json({ message: err.message });
+      }
+    }
+  },
+
+  update: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { title, description, limitDate, companyId } = req.body;
+    try {
+      const [affectedRows, jobs] = await Job.update(
+        {
+          title,
+          description,
+          limitDate,
+          companyId,
+        },
+        {
+          where: { id },
+          returning: true,
+        }
+      );
+      return res.json(jobs[0]);
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).json({ message: err.message });
+      }
+    }
+  },
+
+  delete: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      await Job.destroy({
+        where: { id: id },
+      });
+      return res.status(204).send();
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).json({ message: err.message });
+      }
+    }
+  },
 };
