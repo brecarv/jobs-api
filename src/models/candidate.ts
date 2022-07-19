@@ -3,7 +3,7 @@
 import { sequelize } from "../database";
 import { DataTypes, Model } from "sequelize";
 
-interface CandidateInstance extends Model {
+export interface CandidateInstance extends Model {
   id: number;
   name: string;
   bio: string;
